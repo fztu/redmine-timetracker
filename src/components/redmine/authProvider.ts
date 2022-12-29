@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(customError);
     },
 );
-console.log(process.env);
+// console.log(process.env);
 const TOKEN_KEY = process.env.REACT_APP_REDMINE_TOKEN_KEY ?? "redmine_api_key";
 const REDMINE_USER = process.env.REACT_APP_REDMINE_USER_KEY ?? "redmine_user";
 const API_URL = process.env.REACT_APP_REDMINE_API_URL ?? "";

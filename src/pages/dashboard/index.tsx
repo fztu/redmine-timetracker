@@ -299,7 +299,7 @@ export const DashboardPage: React.FC = () => {
                                     </Col>
                                     <Col span={18}>
                                         <Space wrap>
-                                            <div style={{ fontSize: '20px', width: 150, textAlign: 'center', background: 'black', color: 'white' }}>
+                                            <div style={{ fontSize: '20px', width: 150, textAlign: 'center', background: '#67be23', color: '#fff' }}>
                                                 <span>{timerDays}</span>:<span>{timerHours}</span>:<span>{timerMinutes}</span>:<span>{timerSeconds}</span>
                                             </div>
                                             {!timerIsRunning && <Button danger type="primary" shape="round" size="large" onClick={onTimerStart} icon={<PlayCircleOutlined />} />}

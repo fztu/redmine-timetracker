@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouterContext, TitleProps } from "@pankod/refine-core";
+import "./styles.css";
 
 export const RedmineTitle: React.FC<TitleProps> = ({ collapsed }) => {
     const { Link } = useRouterContext();

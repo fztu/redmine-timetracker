@@ -29,7 +29,7 @@ export const Login: React.FC = () => {
 
     const CardTitle = (
         <Title level={3} className="title">
-            Sign in your Redmine account
+            Sign in with your RedmineB2B account
         </Title>
     );
 

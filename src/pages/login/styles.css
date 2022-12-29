@@ -1,10 +1,10 @@
 .layout {
-    background: radial-gradient(50% 50% at 50% 50%, #63386a 0%, #310438 100%);
+    background: linear-gradient(.25turn, #defaff, 10%, #a9effd);
     background-size: "cover";
   }
   
   .container {
-    max-width: 408px;
+    max-width: 600px;
     margin: auto;
   }
   
