@@ -19,10 +19,13 @@ import { TimeEntryList, TimeEntryShow } from "./pages";
 import { RedmineTitle } from "./components/redmine/title";
 import { DashboardPage } from "./pages/dashboard/index";
 
+console.log(process.env);
+const API_URL = process.env.REACT_APP_REDMINE_API_URL ?? "";
+
 function App() {
   return (
     <Refine
-      dataProvider={RedmineDataProvider("")}
+      dataProvider={RedmineDataProvider(API_URL)}
       notificationProvider={notificationProvider}
       Title={RedmineTitle}
       Layout={Layout}
