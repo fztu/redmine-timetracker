@@ -25,11 +25,11 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(customError);
     },
 );
-
-export const TOKEN_KEY = "redmine_api_key";
-export const REDMINE_USER = "redmine_user";
-// export const API_URL = process.env.REDMINE_URL;
-export const API_URL = "";
+// console.log(process.env);
+const TOKEN_KEY = process.env.REACT_APP_REDMINE_TOKEN_KEY ?? "redmine_api_key";
+const REDMINE_USER = process.env.REACT_APP_REDMINE_USER_KEY ?? "redmine_user";
+const API_URL = process.env.REACT_APP_REDMINE_API_URL ?? "";
+// export const API_URL = "";
 
 export const RedmineAuthProvider: AuthProvider = {
     login: async ({ username, password }) => {

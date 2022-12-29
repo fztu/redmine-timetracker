@@ -6,7 +6,12 @@ import { json } from "node:stream/consumers";
 
 const axiosInstance = axios.create();
 
-const token = localStorage.getItem("redmine_api_key");
+const TOKEN_KEY = process.env.REACT_APP_REDMINE_TOKEN_KEY ?? "redmine_api_key";
+const ALL_PROJECTS_KEY = process.env.REACT_APP_REDMINE_ALL_PROJECTS_KEY ?? "redmine_projects";
+const LEVEL1_PROJECTS_KEY = process.env.REACT_APP_REDMINE_LEVEL1_PROJECTS_KEY ?? "redmine_projects_level1";
+const LEVEL2_PROJECTS_KEY = process.env.REACT_APP_REDMINE_LEVEL2_PROJECTS_KEY ?? "redmine_projects_level2";
+
+const token = localStorage.getItem(TOKEN_KEY);
 if (token) {
     axiosInstance.defaults.headers.common = {
         'X-Redmine-API-Key': `${token}`,
@@ -79,10 +84,7 @@ const getAllProjects = async (
     apiUrl: string,
     httpClient: AxiosInstance = axiosInstance,
 ) => {
-    const allProjectsKey = "redmine_projects";
-    const level1ProjectsKey = "redmine_projects_level1";
-    const level2ProjectsKey = "redmine_projects_level2";
-    const cachedAllProjects = localStorage.getItem(allProjectsKey);
+    const cachedAllProjects = localStorage.getItem(ALL_PROJECTS_KEY);
     var allProjects = new Array<IProject>();
     if (cachedAllProjects) {
         allProjects = JSON.parse(cachedAllProjects);
@@ -145,9 +147,9 @@ const getAllProjects = async (
                     level1Projects.push(p);
                 }
             });
-            localStorage.setItem(allProjectsKey, JSON.stringify(activeProjects));
-            localStorage.setItem(level1ProjectsKey, JSON.stringify(level1Projects));
-            localStorage.setItem(level2ProjectsKey, JSON.stringify(level2Projects));
+            localStorage.setItem(ALL_PROJECTS_KEY, JSON.stringify(activeProjects));
+            localStorage.setItem(LEVEL1_PROJECTS_KEY, JSON.stringify(level1Projects));
+            localStorage.setItem(LEVEL2_PROJECTS_KEY, JSON.stringify(level2Projects));
         }
     }
 };
@@ -157,7 +159,7 @@ export const RedmineDataProvider = (
     httpClient: AxiosInstance = axiosInstance,
 ): DataProvider => ({
     create: async ({ resource, variables }) => {
-        const url = `${apiUrl}/${resource}`;
+        const url = `${apiUrl}/${resource}.json`;
 
         const { data } = await httpClient.post(url, variables);
 

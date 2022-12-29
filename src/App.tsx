@@ -34,8 +34,8 @@ function App() {
       DashboardPage={DashboardPage}
       resources={[{ 
         name: "time_entries", 
-        list: TimeEntryList,
-        show: TimeEntryShow
+        // list: TimeEntryList,
+        // show: TimeEntryShow
       }]}
     />
   );

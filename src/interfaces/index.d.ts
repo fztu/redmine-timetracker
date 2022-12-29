@@ -2,7 +2,7 @@ export interface ITimeEntry {
     id: number;
     project: {
         id: number;
-        name:  string
+        name: string
     };
     user: {
         id: number;
@@ -39,4 +39,11 @@ export interface IProjectCustomField {
     id: number;
     name: string;
     value: string;
+}
+
+interface Option {
+    value: string;
+    label: string;
+    children?: Option[];
+    disabled?: boolean;
 }

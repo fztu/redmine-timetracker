@@ -57,7 +57,7 @@ export const TimeEntryList: React.FC = () => {
                         let level1Projects = new Array<IProject>();
                         let savedLevel1Projects = localStorage.getItem(level1ProjectsKey) ?? "[]";
                         level1Projects = JSON.parse(savedLevel1Projects);
-                        console.log(level1Projects);
+                        // console.log(level1Projects);
                         let level1Matches = level1Projects.filter(obj => {
                             return obj.id === value.id
                         });
