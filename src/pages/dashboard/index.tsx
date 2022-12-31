@@ -25,7 +25,8 @@ import {
     Radio,
     DeleteButton,
     TextField,
-    Tooltip
+    Tooltip,
+    Popconfirm,
 } from "@pankod/refine-antd";
 import { useList, useCreate } from "@pankod/refine-core";
 import { PlayCircleOutlined, PauseCircleOutlined, UserOutlined, EditOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons';
@@ -197,8 +198,7 @@ export const DashboardPage: React.FC = () => {
 
     let savedLocalTimeEntries = localStorage.getItem(LOCAL_TIME_ENTRIES_KEY) ?? "{}";
     let localTimeEntries = JSON.parse(savedLocalTimeEntries);
-    // console.log(localTimeEntries);
-    let localTimeEntriesTableData = Object.keys(localTimeEntries).map(function (key) { return localTimeEntries[key]; });
+    const [localTimeEntriesTableData, setLocalTimeEntriesTableData] = useState<ITimeEntry[]>(Object.keys(localTimeEntries).map(function (key) { return localTimeEntries[key]; }));
 
     const onSaveDraft = () => {
         console.log("Save Draft");
@@ -214,11 +214,36 @@ export const DashboardPage: React.FC = () => {
                 form.resetFields();
                 timerReset();
                 timerPause();
+                setLocalTimeEntriesTableData(Object.keys(localTimeEntries).map(function (key) { return localTimeEntries[key]; }));
             })
             .catch((errorInfo) => {
                 console.log(errorInfo);
             });
     };
+
+    const onFillFromDraft = (id: string) => {
+        let savedLocalTimeEntries = localStorage.getItem(LOCAL_TIME_ENTRIES_KEY) ?? "{}";
+        let localTimeEntries = JSON.parse(savedLocalTimeEntries);
+        if (id in localTimeEntries) {
+            let values = localTimeEntries[id];
+            console.log(values);
+            values["spent_on"] = dayjs(values["spent_on"]);
+            onTimerPause();
+            form.setFieldsValue(values);
+        }
+    }
+
+    const onDeleteDraft = (id: string) => {
+        console.log(id);
+        let savedLocalTimeEntries = localStorage.getItem(LOCAL_TIME_ENTRIES_KEY) ?? "{}";
+        let localTimeEntries = JSON.parse(savedLocalTimeEntries);
+        if (id in localTimeEntries) {
+            delete localTimeEntries[id];
+        }
+        localStorage.setItem(LOCAL_TIME_ENTRIES_KEY, JSON.stringify(localTimeEntries));
+        setLocalTimeEntriesTableData(Object.keys(localTimeEntries).map(function (key) { return localTimeEntries[key]; }));
+        // localTimeEntriesTableData = Object.keys(localTimeEntries).map(function (key) { return localTimeEntries[key]; });
+    }
 
     const { mutate: createTimeEntry } = useCreate<ITimeEntry>();
     
@@ -239,12 +264,16 @@ export const DashboardPage: React.FC = () => {
                     "user_id": user?.id
                 };
                 console.log(timeEntry);
-                // createTimeEntry({
-                //     resource: "time_entries",
-                //     values: {
-                //         time_entry: timeEntry
-                //     },
-                // });
+                createTimeEntry({
+                    resource: "time_entries",
+                    values: {
+                        time_entry: timeEntry
+                    },
+                });
+                form.resetFields();
+                timerReset();
+                timerPause();
+                onDeleteDraft(formValues["id"]);
             })
             .catch((errorInfo) => {
                 console.log(errorInfo);
@@ -485,13 +514,17 @@ export const DashboardPage: React.FC = () => {
             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                 <Card
                     title={
-                        <Text
-                            strong
-                        >
+                        <Text strong >
                             Draft Time Entries
                         </Text>
                     }
                 >
+                    <ul style={{color:'red', fontWeight: 'bold'}}>
+                        <li>This data is saved in your local browser only. </li>
+                        <li>It won't sync to your other browsers. </li>
+                        <li>Please do NOT use Incongnito mode to use this feature.</li>
+                        <li>Please submit to Redmine whenever you can.</li>
+                    </ul>
                     <Table dataSource={localTimeEntriesTableData} rowKey="id">
                         <Table.Column 
                             dataIndex="spent_on" 
@@ -553,13 +586,15 @@ export const DashboardPage: React.FC = () => {
                                 return (
                                     <Space>
                                         <Tooltip placement="top" title="Load to the Time Tracker form to edit.">
-                                            <Button type="primary" icon={<EditOutlined />} />
+                                            <Button type="primary" icon={<EditOutlined />} onClick={() => onFillFromDraft(record.id.toString())} />
                                         </Tooltip>
-                                        <Tooltip placement="top" title="Submit the time entry to Redmine and delete it from the Draft.">
+                                        {/* <Tooltip placement="top" title="Submit the time entry to Redmine and delete it from the Draft.">
                                             <Button type="primary" icon={<UploadOutlined />} />
-                                        </Tooltip>
-                                        <Tooltip placement="top" title="Delete the draft time entry.">
-                                            <Button danger type="primary" icon={<DeleteOutlined />} />
+                                        </Tooltip> */}
+                                        <Tooltip placement="bottom" title="Delete the draft time entry.">
+                                            <Popconfirm title="Sure to delete?" onConfirm={() => onDeleteDraft(record.id.toString())}>
+                                                <Button danger type="primary" icon={<DeleteOutlined />} />
+                                            </Popconfirm>
                                         </Tooltip>
                                     </Space>
                                 );
