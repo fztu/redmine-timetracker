@@ -87,6 +87,12 @@ export const Login: React.FC = () => {
                                     Sign in
                                 </Button>
                             </Form>
+                            <ul style={{color:'red', fontWeight: 'bold'}}>
+                                <li>Please use your https://redmineb2b.silksoftware.com account to login.</li>
+                                <li>This web application is for Silk Software internal employee only.</li>
+                                <li>This web application does not save your Redmine account.</li>
+                                <li>This web application will store certain data in your local browser.</li>
+                            </ul>
                         </Card>
                     </div>
                 </Col>

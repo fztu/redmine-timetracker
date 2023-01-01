@@ -27,6 +27,7 @@ import {
     TextField,
     Tooltip,
     Popconfirm,
+    Collapse,
 } from "@pankod/refine-antd";
 import { useList, useCreate } from "@pankod/refine-core";
 import { PlayCircleOutlined, PauseCircleOutlined, UserOutlined, EditOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons';
@@ -43,6 +44,7 @@ dayjs.extend(customParseFormat);
 const { Text } = Typography;
 const { useBreakpoint } = Grid;
 const { RangePicker } = DatePicker;
+const { Panel } = Collapse;
 
 const activities = [
     {
@@ -519,12 +521,16 @@ export const DashboardPage: React.FC = () => {
                         </Text>
                     }
                 >
-                    <ul style={{color:'red', fontWeight: 'bold'}}>
-                        <li>This data is saved in your local browser only. </li>
-                        <li>It won't sync to your other browsers. </li>
-                        <li>Please do NOT use Incongnito mode to use this feature.</li>
-                        <li>Please submit to Redmine whenever you can.</li>
-                    </ul>
+                    <Collapse defaultActiveKey={['1']}>
+                        <Panel header="Important Notes" key="1">
+                            <ul style={{color:'red', fontWeight: 'bold'}}>
+                                <li>This data is saved in your local browser only. </li>
+                                <li>It won't sync to your other browsers. </li>
+                                <li>Please do NOT use Incongnito mode to use this feature.</li>
+                                <li>Please submit to Redmine whenever you can.</li>
+                            </ul>
+                        </Panel>
+                    </Collapse>
                     <Table dataSource={localTimeEntriesTableData} rowKey="id">
                         <Table.Column 
                             dataIndex="spent_on" 
